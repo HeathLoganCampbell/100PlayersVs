@@ -28,7 +28,7 @@ public class PlayerListener implements Listener
     private PlayerDataManager playerDataManager;
     @NonNull
     private JavaPlugin plugin;
-    private List<PlayerData> playerDatas = new ArrayList<>();
+    public static List<PlayerData> playerDatas = new ArrayList<>();
 
 
     @EventHandler
@@ -39,15 +39,8 @@ public class PlayerListener implements Listener
 
         PlayerData playerData = this.playerDataManager.getPlayer(player);
 
-        BevsScoreboard scoreboard = new BevsScoreboard(plugin, player);
-        scoreboard.open(player);
-        scoreboard.setTitle(CC.bAqua + "TOP MINERS");
-        scoreboard.setLine(1, "Cookie");
-        scoreboard.setLine(2, "CZZA");
-        playerData.setBevsScoreboard(scoreboard);
-
         //remap
-        this.playerDatas = new ArrayList(this.playerDataManager.getPlayerDatas());
+        playerDatas = new ArrayList(this.playerDataManager.getPlayerDatas());
     }
 
     @EventHandler
@@ -67,7 +60,7 @@ public class PlayerListener implements Listener
         {
             PlayerData playerData = this.playerDataManager.getPlayer(player);
             if(playerData == null) continue;
-            BevsScoreboard scoreboard =  playerData.getBevsScoreboard();
+            BevsScoreboard scoreboard = playerData.getBevsScoreboard();
 
             scoreboard.reset();
             int i = 0;
@@ -75,7 +68,9 @@ public class PlayerListener implements Listener
             {
                 if(this.playerDatas.size() <= i) break;
                 PlayerData entryPlayerdata = this.playerDatas.get(i);
-                scoreboard.setLine(i, CC.aqua + entryPlayerdata.getDiamondsMined() + " " + ( playerData == entryPlayerdata ? CC.bGray : CC.gray) + entryPlayerdata.getUsername());
+                scoreboard.setLine(i, CC.aqua +
+                                            entryPlayerdata.getDiamondsMined() + " "
+                                            + ( playerData == entryPlayerdata ? CC.bGray : CC.gray) + entryPlayerdata.getUsername());
             }
             scoreboard.setLine(i + 0, CC.bGray + "==============");
             scoreboard.setLine(i + 1, CC.bGray + playerData.getDiamondsMined() + " You");
